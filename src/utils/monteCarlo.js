@@ -107,12 +107,14 @@ export function runMonteCarlo({
   );
 
   const labels = Array.from({ length: months + 1 }, (_, month) => month);
+  const allPathValues = paths.flat();
+  const trueMin = Math.min(...allPathValues);
+  const trueMax = Math.max(...allPathValues);
+  const yAxisMin = trueMin * 0.95;
+  const yAxisMax = trueMax * 1.05;
+
   const finalValues = paths.map((path) => path[path.length - 1]);
   const sortedFinals = [...finalValues].sort((a, b) => a - b);
-  const lowestFinal = Math.min(...finalValues);
-  const highestFinal = Math.max(...finalValues);
-  const yAxisMin = lowestFinal * 0.85;
-  const yAxisMax = highestFinal * 1.15;
 
   const expectedAmount =
     finalValues.reduce((sum, value) => sum + value, 0) / finalValues.length;

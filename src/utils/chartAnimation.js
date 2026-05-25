@@ -1,7 +1,20 @@
 const REVEAL_INTERVAL_MS = 16;
 
+let revealIntervalId = null;
+
 export function getRevealDuration(pointCount) {
   return pointCount * REVEAL_INTERVAL_MS;
+}
+
+function destroyChartInstance() {
+  if (revealIntervalId) {
+    clearInterval(revealIntervalId);
+    revealIntervalId = null;
+  }
+  if (window.chartInstance) {
+    window.chartInstance.destroy();
+    window.chartInstance = null;
+  }
 }
 
 function formatYAxisTick(value) {
@@ -113,10 +126,7 @@ export function createMonteCarloChart(
     throw new Error('Chart.js is not loaded. Check the CDN script in index.html.');
   }
 
-  if (window.chartInstance) {
-    window.chartInstance.destroy();
-    window.chartInstance = null;
-  }
+  destroyChartInstance();
 
   const fullSeries = datasets.map((dataset) => [...dataset.data]);
   const totalPoints = fullSeries[0]?.length ?? 0;
@@ -131,9 +141,10 @@ export function createMonteCarloChart(
   });
 
   let revealedCount = 0;
-  let intervalId = null;
 
   const revealNextPoint = () => {
+    if (!window.chartInstance) return;
+
     revealedCount += 1;
     window.chartInstance.data.datasets.forEach((dataset, index) => {
       dataset.data = fullSeries[index].slice(0, revealedCount);
@@ -141,24 +152,15 @@ export function createMonteCarloChart(
     window.chartInstance.update('none');
 
     if (revealedCount >= totalPoints) {
-      if (intervalId) {
-        clearInterval(intervalId);
-        intervalId = null;
+      if (revealIntervalId) {
+        clearInterval(revealIntervalId);
+        revealIntervalId = null;
       }
       onRevealComplete?.();
     }
   };
 
-  intervalId = setInterval(revealNextPoint, REVEAL_INTERVAL_MS);
+  revealIntervalId = setInterval(revealNextPoint, REVEAL_INTERVAL_MS);
 
-  return () => {
-    if (intervalId) {
-      clearInterval(intervalId);
-      intervalId = null;
-    }
-    if (window.chartInstance) {
-      window.chartInstance.destroy();
-      window.chartInstance = null;
-    }
-  };
+  return destroyChartInstance;
 }
