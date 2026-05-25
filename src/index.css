@@ -1,3 +1,16 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 :root {
   --bg: #080f0a;
   --gold: #c9a84c;
@@ -9,14 +22,6 @@
   --font-heading: 'Playfair Display', Georgia, serif;
   --font-body: 'DM Sans', system-ui, sans-serif;
   --font-mono: 'Consolas', 'Courier New', monospace;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 html {
@@ -31,10 +36,14 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
 }
 
 #root {
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .app {
@@ -115,8 +124,9 @@ main {
 
 /* Trust carousel */
 .trust-section {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
   padding: 80px 0;
   border-top: 1px solid rgba(201, 168, 76, 0.2);
   border-bottom: 1px solid rgba(201, 168, 76, 0.2);
@@ -500,22 +510,41 @@ main {
   transform: translateY(0);
 }
 
+#chart-section {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
 .chart-panel {
   padding: 1.5rem;
   min-height: 560px;
   display: flex;
   flex-direction: column;
   flex: 1;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.chart-expand {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .chart-container {
   flex: 1;
   min-height: 500px;
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .chart-container canvas {
   width: 100% !important;
+  max-width: 100% !important;
   height: 100% !important;
 }
 
@@ -552,6 +581,8 @@ main {
   padding-top: 1.25rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   animation: fadeInUp 0.5s ease forwards;
+  width: 100%;
+  max-width: 100%;
 }
 
 .stat-card {
@@ -561,6 +592,7 @@ main {
   padding: 1rem 0.9rem;
   border-radius: 0;
   text-align: left;
+  min-width: 0;
 }
 
 .stat-label {
@@ -741,41 +773,56 @@ main {
     font-size: 12px;
   }
 
+  .simulator,
+  .simulator-grid {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
   #chart-section .chart-expand,
   #chart-section .chart-container {
-    height: 320px !important;
-    min-height: 320px !important;
+    height: 300px !important;
+    min-height: 300px !important;
+    max-height: 300px !important;
   }
 
   #chart-section .chart-placeholder {
-    min-height: 320px;
+    min-height: 300px;
   }
 
   .chart-panel {
     min-height: auto;
+    padding: 1rem;
   }
 
   .stats-grid {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 0.5rem;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    gap: 0.4rem;
   }
 
   .stat-card {
-    flex: 0 0 auto;
-    min-width: 130px;
-    max-width: 45%;
+    min-width: 0;
+    max-width: none;
+    padding: 0.75rem 0.5rem;
+    overflow: hidden;
   }
 
   .stat-value {
     font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .stat-label {
     font-size: 9px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .stat-gain {
